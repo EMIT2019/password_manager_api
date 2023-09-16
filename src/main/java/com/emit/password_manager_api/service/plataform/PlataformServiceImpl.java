@@ -4,7 +4,9 @@ import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.model.Plataform;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PlataformServiceImpl implements PlataformService {
 	
 	private final PlataformRepository pRepository;

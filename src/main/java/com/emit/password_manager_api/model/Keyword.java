@@ -20,6 +20,11 @@ public class Keyword implements ModelEntity {
 	@ManyToOne
 	private Operation operation;
 	
+	@NotNull(message = "The field id_plataform needs to be specified.")
+	@JoinColumn(name = "id_plataform")
+	@ManyToOne
+	private Plataform plataform;
+	
 	@NotEmpty(message = "The field keyword must not be empty")
 	@Column(name = "keyword")
 	private String keyword;

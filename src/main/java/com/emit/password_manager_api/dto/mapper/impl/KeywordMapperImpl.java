@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 public class KeywordMapperImpl implements KeywordMapper {
 
 	private final OperationMapper operationMapper;
+	private final PlataformMapper plataformMapper;
 	
-	public KeywordMapperImpl(OperationMapper operationMapper) {
+	public KeywordMapperImpl(OperationMapper operationMapper, PlataformMapper plataformMapper) {
 		this.operationMapper = operationMapper;
+		this.plataformMapper = plataformMapper;
 	}
 	
 	@Override
@@ -21,8 +23,11 @@ public class KeywordMapperImpl implements KeywordMapper {
 		keywordDto.setOperationDto(
 				operationMapper.toGetDtoEntity(entity.getOperation())
 				);
+		keywordDto.setPlataformDto(
+				plataformMapper.toGetDtoEntity(entity.getPlataform())
+				);
 		keywordDto.setKeyword(entity.getKeyword());
-		return null;
+		return keywordDto;
 	}
 
 	@Override
@@ -31,6 +36,9 @@ public class KeywordMapperImpl implements KeywordMapper {
 		keyword.setId_keyword(dto.getId_keyword());
 		keyword.setOperation(
 				operationMapper.toPostEntity(dto.getOperationDto())
+				);
+		keyword.setPlataform(
+				plataformMapper.toPostEntity(dto.getPlataformDto())
 				);
 		keyword.setKeyword(dto.getKeyword());
 		return keyword;

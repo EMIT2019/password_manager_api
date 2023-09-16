@@ -6,5 +6,6 @@ import lombok.*;
 public class KeywordDto implements DtoEntity {
 	private Long id_keyword;
 	private OperationDto operationDto;
+	private PlataformDto plataformDto;
 	private String keyword;
 }

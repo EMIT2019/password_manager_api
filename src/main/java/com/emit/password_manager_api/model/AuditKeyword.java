@@ -1,6 +1,7 @@
 package com.emit.password_manager_api.model;
 
-import java.util.Date;
+import java.sql.Date;
+
 import jakarta.validation.constraints.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,15 +27,13 @@ public class AuditKeyword implements ModelEntity {
 	@ManyToOne
 	private Operation operation;
 	
-	@NotEmpty(message = "The field prev_value must not be empty")
-	@Column(name = "prev_value")
-	private String prev_value;
+	@Column(name = "id_plataform")
+	private Long id_plataform;
 	
 	@NotEmpty(message = "The field current_value must not be empty")
-	@Column(name = "current_value")
-	private String current_value;
+	@Column(name = "keyword")
+	private String keyword_value;
 	
-	@NotEmpty(message = "The field action_date must not be empty")
 	@Column(name = "action_date")
 	private Date action_date;
 }

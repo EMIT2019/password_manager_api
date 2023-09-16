@@ -4,7 +4,9 @@ import java.util.Optional;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.model.AuditKeyword;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuditKeywordServiceImpl implements AuditKeywordService {
 	
 	private final AuditKeywordRepository akRepository;

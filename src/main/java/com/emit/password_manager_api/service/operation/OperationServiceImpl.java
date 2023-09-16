@@ -2,9 +2,13 @@ package com.emit.password_manager_api.service.operation;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.model.Operation;
 
+@Service
 public class OperationServiceImpl implements OperationService {
 	
 	private final OperationRepository oRepository;

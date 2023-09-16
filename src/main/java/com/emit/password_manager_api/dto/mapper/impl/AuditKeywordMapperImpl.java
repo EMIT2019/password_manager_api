@@ -26,8 +26,8 @@ public class AuditKeywordMapperImpl implements AuditKeywordMapper {
 		auditKeywordDto.setOperation(
 				operationMapper.toGetDtoEntity(entity.getOperation())
 				);
-		auditKeywordDto.setPrev_value(entity.getPrev_value());
-		auditKeywordDto.setCurrent_value(entity.getCurrent_value());
+		auditKeywordDto.setId_plataform(entity.getId_plataform());
+		auditKeywordDto.setKeyword_value(entity.getKeyword_value());
 		auditKeywordDto.setAction_date(entity.getAction_date());
 		
 		return auditKeywordDto;
@@ -43,8 +43,8 @@ public class AuditKeywordMapperImpl implements AuditKeywordMapper {
 		auditKeyword.setOperation(
 				operationMapper.toPostEntity(dto.getOperation())
 				);
-		auditKeyword.setPrev_value(dto.getPrev_value());
-		auditKeyword.setCurrent_value(dto.getCurrent_value());
+		auditKeyword.setId_plataform(dto.getId_plataform());
+		auditKeyword.setKeyword_value(dto.getKeyword_value());
 		auditKeyword.setAction_date(dto.getAction_date());
 		
 		return auditKeyword;
