@@ -80,8 +80,7 @@ public class PlataformControllerImpl implements PlataformController {
 
 	@Override
 	public void physicalRemove(Long id) {
-		// TODO Auto-generated method stub
-		
+		pService.remove(id);
 	}
 
 }

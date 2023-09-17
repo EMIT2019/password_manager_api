@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.emit.password_manager_api.controller.AuditKeywordController;
 import com.emit.password_manager_api.dto.AuditKeywordDto;
+import com.emit.password_manager_api.dto.KeywordDto;
 import com.emit.password_manager_api.dto.mapper.AuditKeywordMapper;
+import com.emit.password_manager_api.dto.mapper.KeywordMapper;
+import com.emit.password_manager_api.model.AuditKeyword;
+import com.emit.password_manager_api.model.Keyword;
 import com.emit.password_manager_api.service.auditKeyword.AuditKeywordService;
 
 @RequestMapping("/audit")
@@ -34,8 +38,11 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 
 	@Override
 	public ResponseEntity<AuditKeywordDto> findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		AuditKeyword auditKeyword = new AuditKeyword();
+		
+		auditKeyword = akService.findById(id);
+		
+		return ResponseEntity.ok(mapper.toGetDtoEntity(auditKeyword));
 	}
 
 	@Override
@@ -62,4 +69,16 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 		
 	}
 
+	@Override
+	public ResponseEntity<List<AuditKeywordDto>> findByKeyword(Long id) {
+		Keyword keyword = new Keyword();
+		
+		keyword.setId_keyword(id);
+		
+		List<AuditKeywordDto> auditKeywordDtoList = akService.findByKeyword(keyword).stream()
+				.map(mapper::toGetDtoEntity)
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(auditKeywordDtoList);
+	}
 }

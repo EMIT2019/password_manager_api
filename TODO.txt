@@ -1,0 +1,5 @@
+1. Implement a method for physical remove. This method would fit for deleting physically data like operations and plataforms. (Done)
+2. Implement a methods for tracking the history of a password changes. (Done)
+3. Implement an algorithm for encrypting the passwords
+4. Fix API Validation annotations. Once the api starts working, the fields properties of the database tables changes. 
+5. Implements methods for tracking the changes ocurred on a specific date.

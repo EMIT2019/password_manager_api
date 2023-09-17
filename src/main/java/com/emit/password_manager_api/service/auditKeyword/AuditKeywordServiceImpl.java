@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.model.AuditKeyword;
+import com.emit.password_manager_api.model.Keyword;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,6 +52,11 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 	@Override
 	public void remove(Long id) {
 		akRepository.deleteById(id);
+	}
+
+	@Override
+	public List<AuditKeyword> findByKeyword(Keyword keyword) {
+		return akRepository.findByKeyword(keyword);
 	}
 
 }

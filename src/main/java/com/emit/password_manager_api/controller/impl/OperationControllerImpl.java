@@ -81,8 +81,7 @@ public class OperationControllerImpl implements OperationController {
 
 	@Override
 	public void physicalRemove(Long id) {
-		// TODO Auto-generated method stub
-		
+		oService.remove(id);
 	}
 
 }
