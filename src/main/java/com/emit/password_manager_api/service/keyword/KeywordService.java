@@ -5,4 +5,6 @@ import com.emit.password_manager_api.service.*;
 
 public interface KeywordService extends BaseService<Keyword, Long> {
 	void auditKeyword(Keyword keyword);
+	Keyword encryptKeyword(Keyword keyword);
+	Keyword decryptKeyword(Keyword keyword);
 }

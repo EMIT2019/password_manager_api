@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.emit.password_manager_api.controller.AuditKeywordController;
 import com.emit.password_manager_api.dto.AuditKeywordDto;
-import com.emit.password_manager_api.dto.KeywordDto;
 import com.emit.password_manager_api.dto.mapper.AuditKeywordMapper;
-import com.emit.password_manager_api.dto.mapper.KeywordMapper;
 import com.emit.password_manager_api.model.AuditKeyword;
 import com.emit.password_manager_api.model.Keyword;
 import com.emit.password_manager_api.service.auditKeyword.AuditKeywordService;
