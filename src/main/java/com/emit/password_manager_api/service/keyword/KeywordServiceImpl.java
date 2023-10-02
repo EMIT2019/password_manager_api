@@ -21,9 +21,9 @@ public class KeywordServiceImpl implements KeywordService {
 
 	private final KeywordRepository kRepository;
 	private final AuditKeywordService akService;
-	private final Encrypt<Integer, String> encrypt;
+	private final Encrypt<Integer, String, Keyword> encrypt;
 	
-	public KeywordServiceImpl(KeywordRepository keywordRepository, AuditKeywordService auditKeywordService, Encrypt<Integer, String> encrypt) {
+	public KeywordServiceImpl(KeywordRepository keywordRepository, AuditKeywordService auditKeywordService, Encrypt<Integer, String, Keyword> encrypt) {
 		this.kRepository = keywordRepository;
 		this.akService = auditKeywordService;
 		this.encrypt = encrypt;
@@ -32,7 +32,7 @@ public class KeywordServiceImpl implements KeywordService {
 	@Override
 	public List<Keyword> findAll() {
 		List<Keyword> keywordList = kRepository.findAll().stream()
-				.map(this::decryptKeyword)
+				.map(encrypt::decryptKeyword)
 				.collect(Collectors.toList());
 		
 		return keywordList;
@@ -43,7 +43,7 @@ public class KeywordServiceImpl implements KeywordService {
 		Optional<Keyword> keyword = kRepository.findById(id);
 		
 		if(keyword.isPresent()) {
-			return this.decryptKeyword(keyword.get());
+			return encrypt.decryptKeyword(keyword.get());
 		}
 		
 		throw new RuntimeException("The item with id "+id+" doesn't exists");
@@ -57,12 +57,12 @@ public class KeywordServiceImpl implements KeywordService {
 
 	@Override
 	public Keyword save(Keyword entity) {
-		return kRepository.save(encryptKeyword(entity));
+		return kRepository.save(encrypt.encryptKeyword(entity));
 	}
 
 	@Override
 	public Keyword update(Keyword entity) {
-		return kRepository.save(encryptKeyword(entity));
+		return kRepository.save(encrypt.encryptKeyword(entity));
 	}
 
 	@Override
@@ -86,36 +86,4 @@ public class KeywordServiceImpl implements KeywordService {
 		
 		akService.save(auditKeyword);
 	}
-
-	@Override
-	public Keyword encryptKeyword(Keyword keyword) {
-		try {
-			String salt = "1271872sabsad57XFtsv978SGFGV7";
-			SecretKey key = encrypt.getKeyFromPassword(keyword.getKeyword(), salt);
-			keyword.setKey(Base64.getEncoder().encodeToString(key.getEncoded()));
-			String encryptedKeyword = encrypt.encrypt(keyword.getKeyword(), key);
-			keyword.setKeyword(encryptedKeyword);
-			return keyword;
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		throw new RuntimeException("There was a problem with the saving operation");
-	}
-
-	@Override
-	public Keyword decryptKeyword(Keyword keyword) {
-		try {
-			String encodedKey = keyword.getKey();
-			byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
-			SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-			String decryptedKeyword = encrypt.decrypt(keyword.getKeyword(), key);
-			keyword.setKeyword(decryptedKeyword);
-			return keyword;
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-
 }

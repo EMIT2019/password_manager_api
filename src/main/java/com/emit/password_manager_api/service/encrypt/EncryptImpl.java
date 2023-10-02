@@ -21,8 +21,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Component;
 
+import com.emit.password_manager_api.model.Keyword;
+
 @Component
-public class EncryptImpl implements Encrypt<Integer, String> {
+public class EncryptImpl implements Encrypt<Integer, String, Keyword> {
 
 	@Override
 	public SecretKey getKeyFromPassword(String password, String salt)
@@ -69,7 +71,37 @@ public class EncryptImpl implements Encrypt<Integer, String> {
 		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
 		cipher.init(Cipher.DECRYPT_MODE, key);
 		byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-;		return new String(plainText);
+		return new String(plainText);
+	}
+	
+	@Override
+	public Keyword encryptKeyword(Keyword keyword) {
+		try {
+			String salt = "1271872sabsad57XFtsv978SGFGV7";
+			SecretKey key = this.getKeyFromPassword(keyword.getKeyword(), salt);
+			keyword.setKey(Base64.getEncoder().encodeToString(key.getEncoded()));
+			String encryptedKeyword = this.encrypt(keyword.getKeyword(), key);
+			keyword.setKeyword(encryptedKeyword);
+			return keyword;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		throw new RuntimeException("There was a problem with the saving operation");
 	}
 
+	@Override
+	public Keyword decryptKeyword(Keyword keyword) {
+		try {
+			String encodedKey = keyword.getKey();
+			byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
+			SecretKey key = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+			String decryptedKeyword = this.decrypt(keyword.getKeyword(), key);
+			keyword.setKeyword(decryptedKeyword);
+			return keyword;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
 }

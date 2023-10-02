@@ -11,7 +11,10 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
-public interface Encrypt<T, E> {
+import com.emit.password_manager_api.model.Keyword;
+import com.emit.password_manager_api.model.ModelEntity;
+
+public interface Encrypt<T, E, K extends ModelEntity> {
 	SecretKey getKeyFromPassword(E password, E salt) throws NoSuchAlgorithmException, InvalidKeySpecException;
 	
 	IvParameterSpec generateIv();
@@ -31,4 +34,9 @@ public interface Encrypt<T, E> {
 	BadPaddingException,
 	IllegalBlockSizeException,
 	InvalidAlgorithmParameterException;
+	
+
+	K encryptKeyword(K keyword);
+	
+	K decryptKeyword(K keyword);
 }
