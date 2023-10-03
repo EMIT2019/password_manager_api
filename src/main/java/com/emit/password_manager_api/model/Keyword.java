@@ -29,6 +29,7 @@ public class Keyword implements ModelEntity {
 	@Column(name = "keyword")
 	private String keyword;
 	
+	@NotEmpty(message = "The field key must not be empty.")
 	@Column(name = "`key`")
 	private String key;
 }

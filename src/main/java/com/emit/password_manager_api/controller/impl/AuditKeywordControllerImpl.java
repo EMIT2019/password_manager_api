@@ -79,4 +79,12 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 		
 		return ResponseEntity.ok(auditKeywordDtoList);
 	}
+
+	@Override
+	public ResponseEntity<List<AuditKeywordDto>> getPage(Integer page) {
+		List<AuditKeywordDto> auditKeywordDtoList = akService.findPage(page).stream()
+				.map(mapper::toGetDtoEntity)
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(auditKeywordDtoList);
+	}
 }

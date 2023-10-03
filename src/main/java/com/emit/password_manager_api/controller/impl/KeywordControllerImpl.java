@@ -99,4 +99,12 @@ public class KeywordControllerImpl implements KeywordController {
 		
 	}
 
+	@Override
+	public ResponseEntity<List<KeywordDto>> getPage(Integer page) {
+		List<KeywordDto> keywordDtoList = kService.findPage(page).stream()
+				.map(kMapper::toGetDtoEntity)
+				.collect(Collectors.toList());
+		return ResponseEntity.ok(keywordDtoList);
+	}
+
 }

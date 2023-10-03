@@ -1,7 +1,8 @@
 1. Implement a method for physical remove. This method would fit for deleting physically data like operations and plataforms. (Done)
 2. Implement a methods for tracking the history of a password changes. (Done)
 3. Implement an algorithm for encrypting the passwords (Done)
-4. Fix API Validation annotations. Once the api starts working, the fields properties of the database tables changes. 
+4. Fix API Validation annotations. Once the api starts working, the fields properties of the database tables changes. (Done)
+4.1. Paginate the results of a request. (Done)
 5. Implement methods for tracking the changes ocurred on an specific date.
 6. Implement methods for tracking the changes of an specific password on an specific date.
 7. Implement methods for tracking the general password history between two dates.

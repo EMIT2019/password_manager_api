@@ -83,4 +83,10 @@ public class PlataformControllerImpl implements PlataformController {
 		pService.remove(id);
 	}
 
+	@Override
+	public ResponseEntity<List<PlataformDto>> getPage(Integer page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

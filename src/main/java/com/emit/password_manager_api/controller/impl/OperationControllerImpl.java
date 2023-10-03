@@ -84,4 +84,10 @@ public class OperationControllerImpl implements OperationController {
 		oService.remove(id);
 	}
 
+	@Override
+	public ResponseEntity<List<OperationDto>> getPage(Integer page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

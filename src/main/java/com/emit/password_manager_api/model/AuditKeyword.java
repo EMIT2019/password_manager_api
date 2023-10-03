@@ -27,6 +27,7 @@ public class AuditKeyword implements ModelEntity {
 	@ManyToOne
 	private Operation operation;
 	
+	@NotNull(message = "The field id_plataform ")
 	@Column(name = "id_plataform")
 	private Long id_plataform;
 	
@@ -34,6 +35,7 @@ public class AuditKeyword implements ModelEntity {
 	@Column(name = "keyword")
 	private String keyword_value;
 	
+	@NotNull(message = "The field action_date must not be empty.")
 	@Column(name = "action_date")
 	private Date action_date;
 }

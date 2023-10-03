@@ -1,20 +1,19 @@
 package com.emit.password_manager_api.service.keyword;
 
 import java.sql.Date;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.service.auditKeyword.AuditKeywordService;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
+import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
 import com.emit.password_manager_api.model.Keyword;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class KeywordServiceImpl implements KeywordService {
@@ -51,8 +50,8 @@ public class KeywordServiceImpl implements KeywordService {
 
 	@Override
 	public List<Keyword> findPage(Integer pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
+		return kRepository.findAll(page).getContent();
 	}
 
 	@Override

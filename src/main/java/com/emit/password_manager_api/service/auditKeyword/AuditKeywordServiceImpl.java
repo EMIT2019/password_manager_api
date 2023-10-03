@@ -1,21 +1,16 @@
 package com.emit.password_manager_api.service.auditKeyword;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-
-import java.util.Base64;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
-import com.emit.password_manager_api.service.keyword.KeywordService;
+import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
 import com.emit.password_manager_api.model.Keyword;
 
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +28,14 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 	public List<AuditKeyword> findAll() {
 		List<AuditKeyword> auditKeywordList = akRepository.findAll();
 		
+		for(int x = 0; x < auditKeywordList.size(); x++) {
+			Keyword keyword = new Keyword();
+			keyword.setKey(auditKeywordList.get(x).getKeyword().getKey());
+			keyword.setKeyword(auditKeywordList.get(x).getKeyword().getKeyword());
+			String decryptedKeyword = encrypt.decryptKeyword(keyword).getKeyword();
+			auditKeywordList.get(x).setKeyword_value(decryptedKeyword);
+		}
+		
 		return auditKeywordList;
 	}
 
@@ -49,8 +52,8 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 
 	@Override
 	public List<AuditKeyword> findPage(Integer pageNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
+		return akRepository.findAll(page).getContent();
 	}
 
 	@Override
