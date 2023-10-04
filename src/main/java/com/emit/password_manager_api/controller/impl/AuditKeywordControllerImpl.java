@@ -68,12 +68,12 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 	}
 
 	@Override
-	public ResponseEntity<List<AuditKeywordDto>> findByKeyword(Long id) {
+	public ResponseEntity<List<AuditKeywordDto>> findByKeyword(Long id, Integer page) {
 		Keyword keyword = new Keyword();
 		
 		keyword.setId_keyword(id);
 		
-		List<AuditKeywordDto> auditKeywordDtoList = akService.findByKeyword(keyword).stream()
+		List<AuditKeywordDto> auditKeywordDtoList = akService.findByKeyword(page, keyword).stream()
 				.map(mapper::toGetDtoEntity)
 				.collect(Collectors.toList());
 		

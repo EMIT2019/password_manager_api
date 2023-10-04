@@ -10,5 +10,5 @@ import com.emit.password_manager_api.dto.*;
 
 public interface AuditKeywordController extends BaseController<AuditKeywordDto, Long> {
 	@GetMapping("/track-keyword")
-	ResponseEntity<List<AuditKeywordDto>> findByKeyword(@RequestParam("id") Long id);
+	ResponseEntity<List<AuditKeywordDto>> findByKeyword(@RequestParam("id") Long id, @RequestParam("page") Integer page);
 }

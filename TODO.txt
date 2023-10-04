@@ -11,3 +11,4 @@
 10. Implement a method for searching passwords based on the plataform.
 11. Implement a method for searching passwords based on a string given by the user.
 12. IMPLEMENT SEARCH CRITERIA!!!!!!!!
+13. Implement an GlobalErrorHandler class for handling errors.

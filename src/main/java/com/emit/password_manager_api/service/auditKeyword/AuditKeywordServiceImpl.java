@@ -4,6 +4,10 @@ import java.util.Optional;
 
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
+import com.emit.password_manager_api.repository.specification.SearchCriteria;
+import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
+import com.emit.password_manager_api.repository.specification.Parameters.KeywordParameters;
+import com.emit.password_manager_api.repository.specification.Parameters.OperationParameters;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
 import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
@@ -12,6 +16,7 @@ import com.emit.password_manager_api.model.Keyword;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import com.emit.password_manager_api.repository.specification.AuditKeywordSpecification;
 
 @Service
 public class AuditKeywordServiceImpl implements AuditKeywordService {
@@ -72,7 +77,16 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 	}
 
 	@Override
-	public List<AuditKeyword> findByKeyword(Keyword keyword) {
-		return akRepository.findByKeyword(keyword);
+	public List<AuditKeyword> findByKeyword(Integer pageNumber, Keyword keyword) {
+		
+		SearchCriteria criteria = new SearchCriteria(
+				AuditKeywordParameters.AUDIT_KEYWORD_FIELD.getValue(),
+				OperationParameters.EQUALS_TO,
+				keyword.getId_keyword()
+				);
+		
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
+		
+		return akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
 	}
 }
