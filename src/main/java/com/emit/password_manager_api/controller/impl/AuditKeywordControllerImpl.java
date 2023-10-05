@@ -1,5 +1,7 @@
 package com.emit.password_manager_api.controller.impl;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,5 +88,24 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 				.map(mapper::toGetDtoEntity)
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(auditKeywordDtoList);
+	}
+
+	@Override
+	public ResponseEntity<List<AuditKeywordDto>> findByDate(String date, Integer page) {
+		
+		try {
+			java.util.Date formatedDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);  
+			Date newDate = new Date(formatedDate.getTime());
+			
+			List<AuditKeywordDto> auditKeywordDtoList = akService.findAuditKeywordByDate(page, newDate).stream()
+					.map(mapper::toGetDtoEntity)
+					.collect(Collectors.toList());
+			
+			return ResponseEntity.ok(auditKeywordDtoList);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return null;
 	}
 }

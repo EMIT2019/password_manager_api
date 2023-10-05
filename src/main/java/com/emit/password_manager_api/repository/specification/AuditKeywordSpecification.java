@@ -1,9 +1,13 @@
 package com.emit.password_manager_api.repository.specification;
 
+import java.sql.Date;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import com.emit.password_manager_api.model.AuditKeyword;
 import com.emit.password_manager_api.model.Keyword;
+import com.emit.password_manager_api.model.Plataform;
+import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
 import com.emit.password_manager_api.repository.specification.Parameters.KeywordParameters;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -35,12 +39,26 @@ public class AuditKeywordSpecification implements Specification<AuditKeyword> {
 		
 		try {
 			switch(criteria.getOperation()) {
+			//Search a record with any kind of information provided by the client
 			case EQUALS_TO:
+				//Search an audit by the keyword
 				if(root.get(criteria.getKey()).getJavaType() == Keyword.class) {
+					//Making a join from AuditKeyword to Keyword to make a search based on the keyword provided
 					Join<Keyword, AuditKeyword> keywordAuditJoin = root.join(criteria.getKey());
+					
+					//Based on the information provided, here it makes a search based on the selected primary key keyword
 					if(criteria.getValue() != null) {
-						return criteriaBuilder.equal(keywordAuditJoin.get(KeywordParameters.ID_KEYWORD.getValue()), criteria.getValue()); 
+						return criteriaBuilder.equal(keywordAuditJoin.get(KeywordParameters.KEYWORD_ID_FIELD.getValue()), criteria.getValue()); 
 					}
+				
+					//Search records based on the date
+				} else if(root.get(criteria.getKey()).getJavaType() == Date.class) {
+
+					if(criteria.getValue() != null) {
+						//We pass the object field we want to make the comparison with and the value from the client.
+						return criteriaBuilder.equal(root.get(AuditKeywordParameters.AUDIT_DATE_FIELD.getValue()), criteria.getValue());
+					}
+					
 				}
 			}
 		}catch(Exception ex) {

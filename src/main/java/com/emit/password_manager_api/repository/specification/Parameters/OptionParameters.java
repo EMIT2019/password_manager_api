@@ -1,6 +1,6 @@
 package com.emit.password_manager_api.repository.specification.Parameters;
 
-public enum OperationParameters {
+public enum OptionParameters {
 	EQUALS_TO,
     GREATER_THAN,
     NEGATION,
@@ -35,7 +35,7 @@ public enum OperationParameters {
 
         }
     }
-    public static OperationParameters getValueByInput(char input){
+    public static OptionParameters getValueByInput(char input){
         switch (input){
             case ':':
                 return EQUALS_TO;

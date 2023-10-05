@@ -1,18 +1,18 @@
 package com.emit.password_manager_api.repository.specification.Parameters;
 
 public enum KeywordParameters {
-	ID_KEYWORD,
-	ID_OPERATION,
-	ID_PLATAFORM;
+	KEYWORD_ID_FIELD,
+	KEYWORD_OPERATION_FIELD,
+	KEYWORD_PLATAFORM_FIELD;
 	
 	public String getValue() {
 		switch(this) {
-		case ID_KEYWORD:
+		case KEYWORD_ID_FIELD:
 			return "id_keyword";
-		case ID_OPERATION:
-			return "id_operation";
-		case ID_PLATAFORM:
-			return "id_plataform";
+		case KEYWORD_OPERATION_FIELD:
+			return "operation";
+		case KEYWORD_PLATAFORM_FIELD:
+			return "plataform";
 			default: 
 				throw new RuntimeException("The required field does not exists in "+this.getClass()+"");
 		}

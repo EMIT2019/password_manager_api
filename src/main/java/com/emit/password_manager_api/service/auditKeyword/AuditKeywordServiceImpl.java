@@ -1,13 +1,12 @@
 package com.emit.password_manager_api.service.auditKeyword;
 
 import java.util.Optional;
-
+import java.sql.Date;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.repository.specification.SearchCriteria;
 import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
-import com.emit.password_manager_api.repository.specification.Parameters.KeywordParameters;
-import com.emit.password_manager_api.repository.specification.Parameters.OperationParameters;
+import com.emit.password_manager_api.repository.specification.Parameters.OptionParameters;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
 import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
@@ -31,15 +30,7 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 	
 	@Override
 	public List<AuditKeyword> findAll() {
-		List<AuditKeyword> auditKeywordList = akRepository.findAll();
-		
-		for(int x = 0; x < auditKeywordList.size(); x++) {
-			Keyword keyword = new Keyword();
-			keyword.setKey(auditKeywordList.get(x).getKeyword().getKey());
-			keyword.setKeyword(auditKeywordList.get(x).getKeyword().getKeyword());
-			String decryptedKeyword = encrypt.decryptKeyword(keyword).getKeyword();
-			auditKeywordList.get(x).setKeyword_value(decryptedKeyword);
-		}
+		List<AuditKeyword> auditKeywordList = this.decryptAuditKeyword(akRepository.findAll());
 		
 		return auditKeywordList;
 	}
@@ -68,7 +59,7 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 
 	@Override
 	public AuditKeyword update(AuditKeyword entity) {
-		return akRepository.save(entity);
+		return null;
 	}
 
 	@Override
@@ -79,14 +70,50 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 	@Override
 	public List<AuditKeyword> findByKeyword(Integer pageNumber, Keyword keyword) {
 		
+		List<AuditKeyword> auditKeywordList;
+		
 		SearchCriteria criteria = new SearchCriteria(
 				AuditKeywordParameters.AUDIT_KEYWORD_FIELD.getValue(),
-				OperationParameters.EQUALS_TO,
+				OptionParameters.EQUALS_TO,
 				keyword.getId_keyword()
 				);
 		
 		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
 		
-		return akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
+		auditKeywordList = akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
+		
+		return this.decryptAuditKeyword(auditKeywordList);
+	}
+
+	@Override
+	public List<AuditKeyword> findAuditKeywordByDate(Integer pageNumber, Date date) {
+		
+		List<AuditKeyword> auditKeywordList;
+		
+		SearchCriteria criteria = new SearchCriteria(
+				AuditKeywordParameters.AUDIT_DATE_FIELD.getValue(),
+				OptionParameters.EQUALS_TO,
+				date
+				);
+		
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
+		
+		auditKeywordList = akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
+		
+		return this.decryptAuditKeyword(auditKeywordList);
+	}
+
+	@Override
+	public List<AuditKeyword> decryptAuditKeyword(List<AuditKeyword> auditKeywordList) {
+		
+		for(int x = 0; x < auditKeywordList.size(); x++) {
+			Keyword keyword = new Keyword();
+			keyword.setKey(auditKeywordList.get(x).getKeyword().getKey());
+			keyword.setKeyword(auditKeywordList.get(x).getKeyword().getKeyword());
+			String decryptedKeyword = encrypt.decryptKeyword(keyword).getKeyword();
+			auditKeywordList.get(x).setKeyword_value(decryptedKeyword);
+		}
+		
+		return auditKeywordList;
 	}
 }
