@@ -3,6 +3,7 @@ package com.emit.password_manager_api.controller;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,4 +17,7 @@ public interface AuditKeywordController extends BaseController<AuditKeywordDto, 
 	
 	@GetMapping("/track-keyword/{page}/date")
 	ResponseEntity<List<AuditKeywordDto>> findByDate(@RequestParam("date") String date, @PathVariable Integer page);
+	
+	@GetMapping("/track-keyword/{page}/search")
+	ResponseEntity<List<AuditKeywordDto>> globalSearch(@PathVariable Integer page, @RequestParam("params") String params);
 }

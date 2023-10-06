@@ -108,4 +108,13 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 		
 		return null;
 	}
+
+	@Override
+	public ResponseEntity<List<AuditKeywordDto>> globalSearch(Integer page, String params) {
+		List<AuditKeywordDto> auditKeywordDtoList = akService.globalSearch(page, params).stream()
+				.map(mapper::toGetDtoEntity)
+				.collect(Collectors.toList());
+		
+		return ResponseEntity.ok(auditKeywordDtoList);
+	}
 }

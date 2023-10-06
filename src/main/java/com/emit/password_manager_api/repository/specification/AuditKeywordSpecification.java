@@ -1,12 +1,12 @@
 package com.emit.password_manager_api.repository.specification;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
 
 import com.emit.password_manager_api.model.AuditKeyword;
 import com.emit.password_manager_api.model.Keyword;
-import com.emit.password_manager_api.model.Plataform;
 import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
 import com.emit.password_manager_api.repository.specification.Parameters.KeywordParameters;
 
@@ -53,13 +53,19 @@ public class AuditKeywordSpecification implements Specification<AuditKeyword> {
 				
 					//Search records based on the date
 				} else if(root.get(criteria.getKey()).getJavaType() == Date.class) {
-
+					
 					if(criteria.getValue() != null) {
 						//We pass the object field we want to make the comparison with and the value from the client.
 						return criteriaBuilder.equal(root.get(AuditKeywordParameters.AUDIT_DATE_FIELD.getValue()), criteria.getValue());
 					}
 					
-				}
+				} else if(root.get(criteria.getKey()).getJavaType() == String.class){
+                    return criteriaBuilder.like(
+                            root.<String> get(criteria.getKey()), "%" + criteria.getValue() + "%"
+                    );
+                } else {
+                    return criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue());
+                }
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

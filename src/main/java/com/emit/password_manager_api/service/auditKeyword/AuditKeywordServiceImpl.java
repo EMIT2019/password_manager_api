@@ -1,12 +1,15 @@
 package com.emit.password_manager_api.service.auditKeyword;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.sql.Date;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.repository.specification.SearchCriteria;
 import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
 import com.emit.password_manager_api.repository.specification.Parameters.OptionParameters;
+import com.emit.password_manager_api.repository.specification.builders.AuditKeywordSpecificationBuilder;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
 import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
@@ -14,6 +17,7 @@ import com.emit.password_manager_api.model.Keyword;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.emit.password_manager_api.repository.specification.AuditKeywordSpecification;
 
@@ -101,6 +105,24 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 		auditKeywordList = akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
 		
 		return this.decryptAuditKeyword(auditKeywordList);
+	}
+	
+	@Override
+	public List<AuditKeyword> globalSearch(Integer pageNumber, String searchParams) {
+		AuditKeywordSpecificationBuilder builder = new AuditKeywordSpecificationBuilder();
+		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
+		Matcher matcher = pattern.matcher(searchParams + ",");
+		
+		while(matcher.find()) {
+			System.out.println(matcher.group(1) +" "+ matcher.group(2) +" "+ matcher.group(3));
+			builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+		}
+		
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.HUGE_RECORDS_AMOUNT.getValue());
+		
+		Specification<AuditKeyword> spec = builder.build();
+		
+		return akRepository.findAll(spec, page).getContent();
 	}
 
 	@Override
