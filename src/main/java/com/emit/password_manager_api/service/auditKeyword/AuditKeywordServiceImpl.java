@@ -4,12 +4,12 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import com.emit.password_manager_api.repository.*;
 import com.emit.password_manager_api.repository.specification.SearchCriteria;
 import com.emit.password_manager_api.repository.specification.Parameters.AuditKeywordParameters;
 import com.emit.password_manager_api.repository.specification.Parameters.OptionParameters;
-import com.emit.password_manager_api.repository.specification.builders.AuditKeywordSpecificationBuilder;
 import com.emit.password_manager_api.service.encrypt.Encrypt;
 import com.emit.password_manager_api.service.parameters.GlobalServiceParameters;
 import com.emit.password_manager_api.model.AuditKeyword;
@@ -106,24 +106,6 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 		
 		return this.decryptAuditKeyword(auditKeywordList);
 	}
-	
-	@Override
-	public List<AuditKeyword> globalSearch(Integer pageNumber, String searchParams) {
-		AuditKeywordSpecificationBuilder builder = new AuditKeywordSpecificationBuilder();
-		Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),", Pattern.UNICODE_CHARACTER_CLASS);
-		Matcher matcher = pattern.matcher(searchParams + ",");
-		
-		while(matcher.find()) {
-			System.out.println(matcher.group(1) +" "+ matcher.group(2) +" "+ matcher.group(3));
-			builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-		}
-		
-		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.HUGE_RECORDS_AMOUNT.getValue());
-		
-		Specification<AuditKeyword> spec = builder.build();
-		
-		return akRepository.findAll(spec, page).getContent();
-	}
 
 	@Override
 	public List<AuditKeyword> decryptAuditKeyword(List<AuditKeyword> auditKeywordList) {
@@ -137,5 +119,28 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 		}
 		
 		return auditKeywordList;
+	}
+
+	@Override
+	public List<AuditKeyword> findAuditKeywordBetweenDates(Integer pageNumber, Date startDate, Date endDate) {
+		
+		List<AuditKeyword> auditKeywordList;
+		ArrayList<Date> dates = new ArrayList<>();
+		
+		dates.add(startDate);
+		dates.add(endDate);
+		
+		SearchCriteria criteria = new SearchCriteria(
+				AuditKeywordParameters.AUDIT_DATE_FIELD.getValue(),
+				OptionParameters.EQUALS_TO,
+				dates
+				);
+		
+		
+		Pageable page = PageRequest.of(pageNumber, GlobalServiceParameters.SMALL_RECORDS_AMOUNT.getValue());
+		
+		auditKeywordList = akRepository.findAll(new AuditKeywordSpecification(criteria), page).getContent();
+		
+		return this.decryptAuditKeyword(auditKeywordList);
 	}
 }

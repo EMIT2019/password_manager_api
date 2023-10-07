@@ -1,6 +1,7 @@
 package com.emit.password_manager_api.repository.specification;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -45,24 +46,36 @@ public class AuditKeywordSpecification implements Specification<AuditKeyword> {
 				if(root.get(criteria.getKey()).getJavaType() == Keyword.class) {
 					//Making a join from AuditKeyword to Keyword to make a search based on the keyword provided
 					Join<Keyword, AuditKeyword> keywordAuditJoin = root.join(criteria.getKey());
-					
 					//Based on the information provided, here it makes a search based on the selected primary key keyword
 					if(criteria.getValue() != null) {
 						return criteriaBuilder.equal(keywordAuditJoin.get(KeywordParameters.KEYWORD_ID_FIELD.getValue()), criteria.getValue()); 
 					}
-				
 					//Search records based on the date
 				} else if(root.get(criteria.getKey()).getJavaType() == Date.class) {
-					
-					if(criteria.getValue() != null) {
+					//Search based on one date
+					if(criteria.getValue().getClass() == Date.class) {
 						//We pass the object field we want to make the comparison with and the value from the client.
-						return criteriaBuilder.equal(root.get(AuditKeywordParameters.AUDIT_DATE_FIELD.getValue()), criteria.getValue());
+						return criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue());
+					//Search based on two dates and between them
+					} else if(criteria.getValue().getClass() == ArrayList.class) {
+						try {
+							@SuppressWarnings("unchecked")
+							List<Date> dates = ((List<Date>) criteria.getValue());
+							
+							if(criteria.getValue() != null) {
+								//The date array always will have the start date in the index 0 and the and date in the index 1.
+								return criteriaBuilder.between(root.get(criteria.getKey()), dates.get(0), dates.get(1));
+							}
+						} catch(Exception ex) {
+							ex.printStackTrace();
+						}
 					}
-					
+				//Here it makes a search if the information provided doesn't match with any field
 				} else if(root.get(criteria.getKey()).getJavaType() == String.class){
                     return criteriaBuilder.like(
                             root.<String> get(criteria.getKey()), "%" + criteria.getValue() + "%"
                     );
+                    //Default search if the information provided is unknown regarding the model
                 } else {
                     return criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue());
                 }

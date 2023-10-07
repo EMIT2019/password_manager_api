@@ -110,8 +110,12 @@ public class AuditKeywordControllerImpl implements AuditKeywordController {
 	}
 
 	@Override
-	public ResponseEntity<List<AuditKeywordDto>> globalSearch(Integer page, String params) {
-		List<AuditKeywordDto> auditKeywordDtoList = akService.globalSearch(page, params).stream()
+	public ResponseEntity<List<AuditKeywordDto>> findBetweenDates(Integer page, String start, String end) {
+		
+		Date startDate = Date.valueOf(start);
+		Date endDate = Date.valueOf(end);
+		
+		List<AuditKeywordDto> auditKeywordDtoList = akService.findAuditKeywordBetweenDates(page, startDate, endDate).stream()
 				.map(mapper::toGetDtoEntity)
 				.collect(Collectors.toList());
 		

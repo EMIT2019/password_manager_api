@@ -18,6 +18,6 @@ public interface AuditKeywordController extends BaseController<AuditKeywordDto, 
 	@GetMapping("/track-keyword/{page}/date")
 	ResponseEntity<List<AuditKeywordDto>> findByDate(@RequestParam("date") String date, @PathVariable Integer page);
 	
-	@GetMapping("/track-keyword/{page}/search")
-	ResponseEntity<List<AuditKeywordDto>> globalSearch(@PathVariable Integer page, @RequestParam("params") String params);
+	@GetMapping("/track-keyword/{page}/dates")
+	ResponseEntity<List<AuditKeywordDto>> findBetweenDates(@PathVariable Integer page, @RequestParam("start") String start, @RequestParam("end") String end);
 }

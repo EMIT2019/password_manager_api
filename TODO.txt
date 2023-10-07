@@ -5,7 +5,7 @@
 4.1. Paginate the results of a request. (Done)
 5. Implement methods for tracking the changes ocurred on an specific date. (Done)
 6. Implement methods for tracking the changes of an specific password on an specific date.
-7. Implement methods for tracking the general password history between two dates.
+7. Implement methods for tracking the general password history between two dates. (Done)
 8. Implement methods for tracking the changes of an specific password between two dates.
 9. Implement validation for only getting active passwords in the keyword service (operation != 3).
 10. Implement a method for searching passwords based on the plataform.
