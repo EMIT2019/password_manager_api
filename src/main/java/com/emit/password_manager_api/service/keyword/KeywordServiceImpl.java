@@ -81,6 +81,7 @@ public class KeywordServiceImpl implements KeywordService {
 		auditKeyword.setOperation(keyword.getOperation());
 		auditKeyword.setId_plataform(keyword.getPlataform().getId_plataform());
 		auditKeyword.setKeyword_value(keyword.getKeyword());
+		auditKeyword.setKey(keyword.getKey());
 		auditKeyword.setAction_date(formattedDate);
 		
 		akService.save(auditKeyword);

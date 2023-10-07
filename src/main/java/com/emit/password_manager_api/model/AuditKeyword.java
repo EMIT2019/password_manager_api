@@ -35,6 +35,10 @@ public class AuditKeyword implements ModelEntity {
 	@Column(name = "keyword")
 	private String keyword_value;
 	
+	@NotEmpty(message = "The field key must not be empty")
+	@Column(name = "`key`")
+	private String key;
+	
 	@NotNull(message = "The field action_date must not be empty.")
 	@Column(name = "action_date")
 	private Date action_date;

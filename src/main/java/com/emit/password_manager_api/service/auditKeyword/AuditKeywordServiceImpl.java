@@ -112,8 +112,8 @@ public class AuditKeywordServiceImpl implements AuditKeywordService {
 		
 		for(int x = 0; x < auditKeywordList.size(); x++) {
 			Keyword keyword = new Keyword();
-			keyword.setKey(auditKeywordList.get(x).getKeyword().getKey());
-			keyword.setKeyword(auditKeywordList.get(x).getKeyword().getKeyword());
+			keyword.setKey(auditKeywordList.get(x).getKey());
+			keyword.setKeyword(auditKeywordList.get(x).getKeyword_value());
 			String decryptedKeyword = encrypt.decryptKeyword(keyword).getKeyword();
 			auditKeywordList.get(x).setKeyword_value(decryptedKeyword);
 		}
